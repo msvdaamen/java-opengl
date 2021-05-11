@@ -75,8 +75,10 @@ public class TestGame implements IGameLogic {
         };
         Mesh mesh = new Mesh(positions, colours, indices);
         GameItem gameItem = new GameItem(mesh);
+        GameItem gameItem2 = new GameItem(mesh);
         gameItem.setPosition(0, 0, -2);
-        gameItems = new GameItem[] { gameItem };
+        gameItem2.setPosition(1, 1, -4);
+        gameItems = new GameItem[] { gameItem, gameItem2 };
     }
 
     @Override
