@@ -2,6 +2,8 @@ package com.msvdaamen.engine.shapes;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
@@ -12,11 +14,7 @@ import org.lwjgl.system.MemoryUtil;
 public class Mesh {
     private final int vaoId;
 
-    private final int posVboId;
-
-    private final int colourVboId;
-
-    private final int idxVboId;
+    private final List<Integer> vboIdList;
 
     private final int vertexCount;
 
@@ -25,34 +23,38 @@ public class Mesh {
         FloatBuffer colourBuffer = null;
         IntBuffer indicesBuffer = null;
         try {
+            vboIdList = new ArrayList<>();
             vertexCount = indices.length;
 
             vaoId = glGenVertexArrays();
             glBindVertexArray(vaoId);
 
             // Position VBO
-            posVboId = glGenBuffers();
+            int vboId = glGenBuffers();
+            vboIdList.add(vboId);
             posBuffer = MemoryUtil.memAllocFloat(positions.length);
             posBuffer.put(positions).flip();
-            glBindBuffer(GL_ARRAY_BUFFER, posVboId);
+            glBindBuffer(GL_ARRAY_BUFFER, vboId);
             glBufferData(GL_ARRAY_BUFFER, posBuffer, GL_STATIC_DRAW);
             glEnableVertexAttribArray(0);
             glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
             // Colour VBO
-            colourVboId = glGenBuffers();
+            vboId = glGenBuffers();
+            vboIdList.add(vboId);
             colourBuffer = MemoryUtil.memAllocFloat(colours.length);
             colourBuffer.put(colours).flip();
-            glBindBuffer(GL_ARRAY_BUFFER, colourVboId);
+            glBindBuffer(GL_ARRAY_BUFFER, vboId);
             glBufferData(GL_ARRAY_BUFFER, colourBuffer, GL_STATIC_DRAW);
             glEnableVertexAttribArray(1);
             glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
 
             // Index VBO
-            idxVboId = glGenBuffers();
+            vboId = glGenBuffers();
+            vboIdList.add(vboId);
             indicesBuffer = MemoryUtil.memAllocInt(indices.length);
             indicesBuffer.put(indices).flip();
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idxVboId);
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vboId);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_STATIC_DRAW);
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -97,9 +99,9 @@ public class Mesh {
 
         // Delete the VBOs
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glDeleteBuffers(posVboId);
-        glDeleteBuffers(colourVboId);
-        glDeleteBuffers(idxVboId);
+        for (int vboId : vboIdList) {
+            glDeleteBuffers(vboId);
+        }
 
         // Delete the VAO
         glBindVertexArray(0);
