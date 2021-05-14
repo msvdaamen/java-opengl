@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>Java openGl</groupId>
+    <groupId>java.openGl</groupId>
     <artifactId>java-opengl</artifactId>
     <version>1.0-SNAPSHOT</version>
     <build>
@@ -61,6 +61,7 @@
         <lwjgl.version>3.2.3</lwjgl.version>
         <lwjgl.natives>natives-windows</lwjgl.natives>
         <joml.version>1.9.6</joml.version>
+        <pngdecoder.version>1.0</pngdecoder.version>
     </properties>
 
     <dependencyManagement>
